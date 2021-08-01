@@ -1,6 +1,7 @@
 const express = require("express");
 const ejs = require('ejs');
 const mongoose = require('mongoose');
+const encrypt = require('mongoose-encryption');
 
 const app = express();
 
@@ -23,6 +24,10 @@ const usersSchema = new mongoose.Schema({
         required:[true,'password cannot empty!']
     }
 });
+
+const secret = "thisisthesecretkey";
+usersSchema.plugin(encrypt,{ secret: secret ,encryptedFields: ['password'] });
+
 
 const User = new mongoose.model('User',usersSchema);
 
