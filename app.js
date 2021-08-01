@@ -66,17 +66,27 @@ app.post('/login',(req,res)=>{
     const username = req.body.username;
     const password = req.body.password;
 
-    User.findOne({username:username},(error,foundUser)=>{
-        if(error){
-            res.send(error);
-        }else{
-            if(password === foundUser.password){
-                res.render('secrets');
+    if(username && password){
+        User.findOne({username:username},(error,foundUser)=>{
+            if(error){
+                res.send(error);
             }else{
-                res.send("wrong password");
+                if(foundUser){
+                    if(password === foundUser.password){
+                        res.render('secrets');
+                    }else{
+                        res.send("wrong password");
+                    }
+                }else{
+                    res.send("no user");
+                }
+                
             }
-        }
-    });
+        });
+    }else{
+        res.send("empty");
+    }
+
 
 });
 
